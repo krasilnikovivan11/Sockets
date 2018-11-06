@@ -13,18 +13,19 @@ public class Server {
             System.out.println("Started");
             Socket client = serverSocket.accept();
             System.out.println("Connected");
-            Scanner in = new Scanner(client.getInputStream());
-//            PrintWriter out = new PrintWriter(client.getOutputStream());
-//            Scanner scanner = new Scanner(System.in);
+            final Scanner in = new Scanner(client.getInputStream());
+            final PrintWriter out = new PrintWriter(client.getOutputStream());
+//            String s = "sf";
 
-            while(true) {
-                if (in.hasNext()) {
-                    System.out.println("Echo: " + in.nextLine());
+            new Thread(() -> {
+                while (true) {
+                    if (in.hasNext()) {
+                        out.println("Echo: " + in.nextLine());
+                        out.flush();
+                    }
                 }
-//                out.println(scanner.nextLine());
-//                out.flush();
-//                System.out.println(in.nextLine());
-            }
+            }).start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
